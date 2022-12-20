@@ -151,11 +151,20 @@ namespace PasswordVault
             selected = true;
             if (e.ColumnIndex == 0)
             {
-                detailsPage = new DetailsPage(c.EncryptText(TableGridView.CurrentRow.Cells[1].Value.ToString(),Key));
-                detailsPage.ShowDialog();
-                listData.Clear();
-                ListDatasAsync();
-                selected = false;
+                try
+                {
+                    client = new FireSharp.FirebaseClient(ifc);
+                    detailsPage = new DetailsPage(c.EncryptText(TableGridView.CurrentRow.Cells[1].Value.ToString(), Key));
+                    detailsPage.ShowDialog();
+                    listData.Clear();
+                    ListDatasAsync();
+                    selected = false;
+                }
+                catch
+                {
+                    MessageBox.Show("No Inernet or Conneciton Problem", "Error");
+                }
+                
             }
         }
 
@@ -244,6 +253,12 @@ namespace PasswordVault
                 this.Hide();
                 login.ShowDialog();
             }
+        }
+
+        private void refreshBtn_Click(object sender, EventArgs e)
+        {
+            listData.Clear();
+            ListDatasAsync();
         }
     }
 }

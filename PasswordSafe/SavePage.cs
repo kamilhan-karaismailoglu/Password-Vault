@@ -116,8 +116,6 @@ namespace PasswordVault
         {
             var resultList = new List<string>();
 
-            try
-            {
                 client = new FireSharp.FirebaseClient(ifc);
 
                 FirebaseResponse response = await client.GetAsync(MD5Encryption(HomePage.Email));
@@ -129,11 +127,7 @@ namespace PasswordVault
                     string d = item.Value.Title;
                     resultList.Add(d);
                 }
-            }
-            catch
-            {
-                MessageBox.Show("No Inernet or Conneciton Problem", "Error");
-            }
+
 
             return resultList;
         }

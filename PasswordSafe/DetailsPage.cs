@@ -35,43 +35,35 @@ namespace PasswordVault
         {
             InitializeComponent();
 
-            try
+            client = new FireSharp.FirebaseClient(ifc);
+            FirebaseResponse res = client.Get(@MD5Encryption(HomePage.Email) + "/" + title);
+
+            data = res.ResultAs<Data>();
+
+            titleTxt.Text = c.DecryptText(data.Title, HomePage.Key);
+            usernameTxt.Text = c.DecryptText(data.Username, HomePage.Key);
+            urlTxt.Text = c.DecryptText(data.Url, HomePage.Key);
+            passwordTxt.Text = c.DecryptText(data.Password, HomePage.Key);
+
+            this.Text = "Details: " + c.DecryptText(data.Title, HomePage.Key);
+            UpdateTimeLbl.Text = "Last Update Time: " + c.DecryptText(data.UpdateTime, HomePage.Key);
+
+            if (data.PasswordLast1 != "")
             {
-                client = new FireSharp.FirebaseClient(ifc);
-                FirebaseResponse res = client.Get(@MD5Encryption(HomePage.Email) + "/" + title);
-
-                data = res.ResultAs<Data>();
-
-                titleTxt.Text = c.DecryptText(data.Title,HomePage.Key);
-                usernameTxt.Text = c.DecryptText(data.Username, HomePage.Key);
-                urlTxt.Text = c.DecryptText(data.Url, HomePage.Key);
-                passwordTxt.Text = c.DecryptText(data.Password, HomePage.Key);
-
-                this.Text = "Details: " + c.DecryptText(data.Title, HomePage.Key);
-                UpdateTimeLbl.Text = "Last Update Time: " + c.DecryptText(data.UpdateTime, HomePage.Key);
-
-                if (data.PasswordLast1 != "")
-                {
-                    passwordLast1Txt.Text = c.DecryptText(data.PasswordLast1, HomePage.Key);
-                    Similiar1Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast1, HomePage.Key)).ToString("0.000");
-                }
-                if (data.PasswordLast2 != "")
-                {
-                    passwordLast2Txt.Text = c.DecryptText(data.PasswordLast2, HomePage.Key);
-                    Similiar2Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast2, HomePage.Key)).ToString("0.000");
-                }
-                if (data.PasswordLast3 != "")
-                {
-                    passwordLast3Txt.Text = c.DecryptText(data.PasswordLast3, HomePage.Key);
-                    Similiar3Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast3, HomePage.Key)).ToString("0.000");
-                }
-                GeneratePasswordRate(c.DecryptText(data.Password, HomePage.Key));
+                passwordLast1Txt.Text = c.DecryptText(data.PasswordLast1, HomePage.Key);
+                Similiar1Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast1, HomePage.Key)).ToString("0.000");
             }
-            catch
+            if (data.PasswordLast2 != "")
             {
-                MessageBox.Show("No Inernet or Conneciton Problem", "Error");
-                this.Close();
+                passwordLast2Txt.Text = c.DecryptText(data.PasswordLast2, HomePage.Key);
+                Similiar2Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast2, HomePage.Key)).ToString("0.000");
             }
+            if (data.PasswordLast3 != "")
+            {
+                passwordLast3Txt.Text = c.DecryptText(data.PasswordLast3, HomePage.Key);
+                Similiar3Lbl.Text = GenerateSimiliar(c.DecryptText(data.Password, HomePage.Key), c.DecryptText(data.PasswordLast3, HomePage.Key)).ToString("0.000");
+            }
+            GeneratePasswordRate(c.DecryptText(data.Password, HomePage.Key));
         }
 
         private void ShowLinkLbl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -313,63 +305,40 @@ namespace PasswordVault
     
         private async Task<bool> InsertNewData(Data newData)
         {
-            try
-            {
-                SetResponse response = await client.SetAsync(MD5Encryption(HomePage.Email) + "/" + newData.Title, newData);
-                Data result = response.ResultAs<Data>();
+            SetResponse response = await client.SetAsync(MD5Encryption(HomePage.Email) + "/" + newData.Title, newData);
+            Data result = response.ResultAs<Data>();
 
-                if (result.Title != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
+            if (result.Title != null)
             {
-                MessageBox.Show("No Inernet or Conneciton Problem", "Error");
+                return true;
+            }
+            else
+            {
                 return false;
-            }       
+            }
         }
 
         private async Task<bool> DeleteOldData(string dataTitle)
         {
-            try
-            {
-                client = new FireSharp.FirebaseClient(ifc);
-                var response = await client.DeleteAsync(MD5Encryption(HomePage.Email) + "/" + dataTitle);
-                return true;
-            }
-            catch
-            {
-                MessageBox.Show("No Inernet or Conneciton Problem", "Error");
-                return false;
-            }
+            client = new FireSharp.FirebaseClient(ifc);
+            var response = await client.DeleteAsync(MD5Encryption(HomePage.Email) + "/" + dataTitle);
+            return true;
         }
 
         private async Task<List<string>> SearchInDatabase(string searchTerm)
         {
             var resultList = new List<string>();
 
-            try
-            {
-                client = new FireSharp.FirebaseClient(ifc);
+            client = new FireSharp.FirebaseClient(ifc);
 
-                FirebaseResponse response = await client.GetAsync(MD5Encryption(HomePage.Email));
-                var result = response.Body;
-                var data = JsonConvert.DeserializeObject<Dictionary<string, Data>>(result);
+            FirebaseResponse response = await client.GetAsync(MD5Encryption(HomePage.Email));
+            var result = response.Body;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, Data>>(result);
 
-                foreach (var item in data)
-                {
-                    string d = item.Value.Title;
-                    resultList.Add(d);
-                }
-            }
-            catch
+            foreach (var item in data)
             {
-                MessageBox.Show("No Inernet or Conneciton Problem", "Error");
+                string d = item.Value.Title;
+                resultList.Add(d);
             }
 
             return resultList;

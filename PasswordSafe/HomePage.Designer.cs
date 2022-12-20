@@ -41,6 +41,7 @@
             this.copyPasswordBtn = new System.Windows.Forms.Button();
             this.DeleteBtn = new System.Windows.Forms.Button();
             this.loginOutBtn = new System.Windows.Forms.Button();
+            this.refreshBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TableGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -179,11 +180,23 @@
             this.loginOutBtn.UseVisualStyleBackColor = false;
             this.loginOutBtn.Click += new System.EventHandler(this.button1_Click);
             // 
+            // refreshBtn
+            // 
+            this.refreshBtn.Font = new System.Drawing.Font("Open Sans", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.refreshBtn.Location = new System.Drawing.Point(901, 12);
+            this.refreshBtn.Name = "refreshBtn";
+            this.refreshBtn.Size = new System.Drawing.Size(98, 30);
+            this.refreshBtn.TabIndex = 10;
+            this.refreshBtn.Text = "Refresh";
+            this.refreshBtn.UseVisualStyleBackColor = true;
+            this.refreshBtn.Click += new System.EventHandler(this.refreshBtn_Click);
+            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1123, 487);
+            this.Controls.Add(this.refreshBtn);
             this.Controls.Add(this.loginOutBtn);
             this.Controls.Add(this.DeleteBtn);
             this.Controls.Add(this.groupBox1);
@@ -212,5 +225,6 @@
         private System.Windows.Forms.Button copyPasswordBtn;
         private System.Windows.Forms.Button DeleteBtn;
         private System.Windows.Forms.Button loginOutBtn;
+        private System.Windows.Forms.Button refreshBtn;
     }
 }
