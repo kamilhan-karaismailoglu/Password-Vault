@@ -163,8 +163,7 @@ namespace PasswordVault
                 catch
                 {
                     MessageBox.Show("No Inernet or Conneciton Problem", "Error");
-                }
-                
+                }              
             }
         }
 
@@ -220,13 +219,10 @@ namespace PasswordVault
 
             TableGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.SelectionBackColor = Color.Gray;
 
-            // Zamanlayıcıyı başlatın
             Timer timer = new Timer();
-            timer.Interval = 700; // 5 saniye
+            timer.Interval = 700;
             timer.Tick += (s, args) => { TableGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.SelectionBackColor = SystemColors.ActiveCaption; timer.Stop(); };
-            timer.Start();
-
-            
+            timer.Start();         
         }
 
         private string MD5Encryption(string encryptionText)
@@ -262,4 +258,3 @@ namespace PasswordVault
         }
     }
 }
-

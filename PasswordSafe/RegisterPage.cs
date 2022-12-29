@@ -178,18 +178,17 @@ namespace PasswordVault
                                                                 AuthTokenAsyncFactory = () => Task.FromResult(firebaseDatabaseSecret)
                                                             });
 
-
             var query = firebaseClient.Child(MD5Encryption(LoginPage.a)).OrderByKey().EqualTo(email).OnceAsync<object>();
-                    var queryResult = query.Result;
+            var queryResult = query.Result;
 
-                    if (queryResult.Count > 0)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }   
+            if (queryResult.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

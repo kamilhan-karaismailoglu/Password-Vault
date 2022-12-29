@@ -116,18 +116,17 @@ namespace PasswordVault
         {
             var resultList = new List<string>();
 
-                client = new FireSharp.FirebaseClient(ifc);
+            client = new FireSharp.FirebaseClient(ifc);
 
-                FirebaseResponse response = await client.GetAsync(MD5Encryption(HomePage.Email));
-                var result = response.Body;
-                var data = JsonConvert.DeserializeObject<Dictionary<string, Data>>(result);
+            FirebaseResponse response = await client.GetAsync(MD5Encryption(HomePage.Email));
+            var result = response.Body;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, Data>>(result);
 
-                foreach (var item in data)
-                {
-                    string d = item.Value.Title;
-                    resultList.Add(d);
-                }
-
+            foreach (var item in data)
+            {
+                string d = item.Value.Title;
+                resultList.Add(d);
+            }
 
             return resultList;
         }
